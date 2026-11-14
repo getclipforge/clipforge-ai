@@ -1,0 +1,20 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI Clipper</title><style>
+body{font-family:sans-serif;background:#0f0f14;color:#fff;max-width:900px;margin:auto;padding:20px}
+input,button{padding:12px;border-radius:8px;border:0;font-size:16px;margin:6px 0;width:100%;box-sizing:border-box}
+button{background:#ff3d5a;color:#fff;font-weight:bold;cursor:pointer}
+.g{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-top:20px}
+.c{background:#1a1a22;padding:10px;border-radius:10px}video{width:100%;border-radius:8px}
+a{color:#ffd400}</style></head><body>
+<h1>🎬 AI Clipper</h1>
+<form id="f"><input name="url" placeholder="YouTube link paste karo">
+<p style="text-align:center">— ya —</p><input type="file" name="file" accept="video/*">
+<label><input type="checkbox" name="captions" checked style="width:auto"> Captions ON</label>
+<button>Clips banao</button></form><p id="s"></p><div id="r"></div>
+<script>
+f.onsubmit=async e=>{e.preventDefault();s.textContent="⏳ Processing... video ki length ke hisaab se 1-5 min lagte hain";r.innerHTML="";
+const d=await(await fetch("/process",{method:"POST",body:new FormData(f)})).json();
+if(d.error){s.textContent="❌ "+d.error;return}
+s.innerHTML=`✅ ${d.clips.length} clips ready — <a href="${d.zip}">Download ALL (zip)</a>`;
+r.innerHTML='<div class="g">'+d.clips.map(c=>`<div class="c"><video src="${c.url}" controls></video><p><b>${c.hook}</b></p><a href="${c.url}" download>⬇ Download</a></div>`).join("")+"</div>"}
+</script></body></html>
