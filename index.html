@@ -1,20 +1,179 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>AI Clipper</title><style>
-body{font-family:sans-serif;background:#0f0f14;color:#fff;max-width:900px;margin:auto;padding:20px}
-input,button{padding:12px;border-radius:8px;border:0;font-size:16px;margin:6px 0;width:100%;box-sizing:border-box}
-button{background:#ff3d5a;color:#fff;font-weight:bold;cursor:pointer}
-.g{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-top:20px}
-.c{background:#1a1a22;padding:10px;border-radius:10px}video{width:100%;border-radius:8px}
-a{color:#ffd400}</style></head><body>
-<h1>🎬 AI Clipper</h1>
-<form id="f"><input name="url" placeholder="YouTube link paste karo">
-<p style="text-align:center">— ya —</p><input type="file" name="file" accept="video/*">
-<label><input type="checkbox" name="captions" checked style="width:auto"> Captions ON</label>
-<button>Clips banao</button></form><p id="s"></p><div id="r"></div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#05080e">
+<title>ClipForge AI | Create Viral Clips</title>
+<style>
+:root{--blue:#08baff;--bg:#05080e;--card:#0c1421;--muted:#9aabc0}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:radial-gradient(ellipse at 80% 15%,#07335a55,transparent 35%),var(--bg);color:#f4f8ff;font-family:Arial,Helvetica,sans-serif}
+.wrap{width:min(1150px,92%);margin:auto}
+header{height:82px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffffff12}
+.logo{font-size:24px;font-weight:900;letter-spacing:-1px}
+.logo span,h1 span,.blue{color:var(--blue)}
+nav{display:flex;gap:25px}
+nav a{color:#c5d2e2;text-decoration:none;font-size:14px}
+button,.btn{cursor:pointer;border:0;border-radius:12px;padding:14px 20px;background:linear-gradient(100deg,#08baff,#0876ff);color:white;font-weight:bold;text-decoration:none;display:inline-block}
+.outline{background:transparent;border:1px solid #168bc9}
+.hero{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;padding:75px 0 55px}
+.tag{display:inline-block;border:1px solid #168bc955;background:#071827;border-radius:30px;padding:9px 13px;color:#a9e8ff;font-size:12px}
+h1{font-size:clamp(42px,6vw,68px);line-height:1.04;letter-spacing:-2px;margin:22px 0}
+.lead{font-size:17px;color:#b5c5d9;line-height:1.8}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:25px}
+.visual{border:1px solid #168bc966;border-radius:25px;padding:25px;background:linear-gradient(145deg,#0c1b2b,#080d16);box-shadow:0 0 50px #007bff17}
+.visual-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}
+.status{font-size:12px;color:#7df0ba}
+.screen{height:170px;border-radius:16px;background:radial-gradient(ellipse at 50% 30%,#135d8b,#101d31 60%,#070c14);display:grid;place-items:center;font-size:62px;position:relative;overflow:hidden}
+.play{position:absolute;border:1px solid #ffffff70;border-radius:50%;padding:15px;background:#06101bc9;font-size:20px}
+.wave{display:flex;align-items:center;gap:4px;height:48px;justify-content:center;margin:12px 0}
+.wave i{width:4px;border-radius:4px;background:var(--blue);height:var(--h);opacity:.85}
+.statrow{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:15px}
+.stat{background:#111e2d;border:1px solid #ffffff0b;padding:13px;border-radius:12px}
+.stat b{display:block;color:var(--blue);font-size:19px}
+.stat small{color:var(--muted);font-size:11px}
+.tool{border:1px solid #147fba66;border-radius:22px;background:#0a111c;padding:25px;box-shadow:0 15px 50px #0005}
+.tool h2{margin:0 0 8px;font-size:25px}
+.sub{color:var(--muted);font-size:13px;line-height:1.6}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:22px 0 15px}
+.tabs button{background:#101b29;border:1px solid #24374a;color:#b9c9dc}
+.tabs button.active{background:#0878c6;border-color:#08baff;color:white}
+input[type=url]{width:100%;padding:16px;background:#050a12;border:1px solid #31485f;border-radius:12px;color:white;outline:none}
+input:focus{border-color:var(--blue)}
+.upload{display:block;text-align:center;border:1px dashed #2479a8;border-radius:14px;padding:24px 12px;color:#d7efff;cursor:pointer;margin:14px 0}
+.upload input{display:none}
+.upload strong{display:block;font-size:30px;color:var(--blue);margin-bottom:8px}
+.generate{width:100%;margin-top:13px;font-size:15px}
+.notice{display:none;background:#0a2236;border:1px solid #17608d;border-radius:10px;padding:12px;color:#c6eaff;font-size:13px;line-height:1.6;margin-top:14px;overflow-wrap:anywhere}
+.features{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;padding:35px 0 65px}
+.feature{border:1px solid #1b3044;border-radius:17px;padding:22px;background:linear-gradient(145deg,#0d1825,#080d14)}
+.icon{font-size:27px;color:var(--blue)}
+.feature h3{font-size:17px}
+.feature p{font-size:13px;line-height:1.7;color:var(--muted)}
+.heading{text-align:center;font-size:36px;margin-bottom:10px}
+.center{text-align:center}
+footer{border-top:1px solid #ffffff12;padding:25px 0;color:#8495a9;font-size:12px}
+@media(max-width:760px){
+ nav{display:none}
+ .hero{grid-template-columns:1fr;padding:48px 0 35px;gap:28px}
+ h1{font-size:47px}
+ .features{grid-template-columns:1fr 1fr;gap:10px}
+ .feature{padding:16px}
+ .visual{padding:17px}
+ .lead{font-size:15px}
+}
+@media(max-width:390px){h1{font-size:39px}.features{grid-template-columns:1fr}.tool{padding:17px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+ <div class="logo">▶ ClipForge <span>AI</span></div>
+ <nav><a href="#home">Home</a><a href="#features">Features</a><a href="#clipper">AI Clipper</a></nav>
+ <a class="btn" href="#clipper">Get Started ↗</a>
+</header>
+
+<main id="home">
+<section class="hero">
+ <div>
+  <span class="tag">✦ NEXT-GEN AI VIDEO CLIPPING</span>
+  <h1>Turn Long Videos Into <span>Viral Clips.</span></h1>
+  <p class="lead">Find powerful moments, create short-form content, and prepare captions for YouTube Shorts, Instagram Reels and TikTok — all in one workspace.</p>
+  <div class="actions">
+   <a class="btn" href="#clipper">✦ Start Clipping</a>
+   <a class="btn outline" href="#features">Explore Features</a>
+  </div>
+  <p class="sub">⚡ Creator-focused workflow · 📱 Mobile-friendly design</p>
+ </div>
+ <div class="visual">
+  <div class="visual-top"><strong>✦ Your AI Workspace</strong><span class="status">● READY TO START</span></div>
+  <div class="screen">🎬<span class="play">▶</span></div>
+  <div class="wave">
+   <i style="--h:12px"></i><i style="--h:25px"></i><i style="--h:35px"></i><i style="--h:18px"></i><i style="--h:40px"></i><i style="--h:27px"></i><i style="--h:14px"></i><i style="--h:32px"></i><i style="--h:43px"></i><i style="--h:19px"></i><i style="--h:28px"></i><i style="--h:38px"></i><i style="--h:17px"></i><i style="--h:29px"></i><i style="--h:40px"></i><i style="--h:21px"></i><i style="--h:34px"></i><i style="--h:14px"></i><i style="--h:27px"></i><i style="--h:36px"></i>
+  </div>
+  <div class="statrow">
+   <div class="stat"><b>AI</b><small>Highlights</small></div>
+   <div class="stat"><b>9:16</b><small>Vertical format</small></div>
+   <div class="stat"><b>CC</b><small>Captions</small></div>
+  </div>
+ </div>
+</section>
+
+<section id="clipper">
+ <div class="tool">
+  <h2>Start Creating <span class="blue">Clips</span></h2>
+  <p class="sub">Add a video link or select a video from your device.</p>
+  <div class="tabs">
+   <button id="linkTab" class="active" type="button">🔗 Video Link</button>
+   <button id="fileTab" type="button">☁ Upload Video</button>
+  </div>
+  <div id="linkPanel">
+   <input type="url" id="videoUrl" placeholder="Paste video URL here..." aria-label="Video URL">
+  </div>
+  <div id="filePanel" style="display:none">
+   <label class="upload" for="videoFile"><strong>☁</strong>Choose a video file<input id="videoFile" type="file" accept="video/*"><span class="sub" id="fileName">MP4, MOV or WebM</span></label>
+  </div>
+  <label class="upload" for="videoFile" id="quickUpload"><strong>＋</strong>Or choose a video from your phone<span class="sub">Tap here to browse files</span></label>
+  <button class="generate" id="generate">✦ Generate Clips →</button>
+  <div class="notice" id="notice" role="status"></div>
+  <p class="sub">Real AI processing requires a connected video-processing service.</p>
+ </div>
+</section>
+
+<section id="features">
+ <h2 class="heading">Made for <span class="blue">Creators</span></h2>
+ <p class="sub center">A cleaner workflow from long video to short-form content.</p>
+ <div class="features">
+  <article class="feature"><div class="icon">✦</div><h3>AI Highlights</h3><p>Build a workflow for finding engaging moments in longer videos.</p></article>
+  <article class="feature"><div class="icon">▦</div><h3>Multiple Clips</h3><p>Prepare a set of short clips from a single source video.</p></article>
+  <article class="feature"><div class="icon">CC</div><h3>Captions & Hooks</h3><p>Plan social captions and opening hooks for your content.</p></article>
+  <article class="feature"><div class="icon">▣</div><h3>Creator Exports</h3><p>Designed for a vertical-video editing and export workflow.</p></article>
+ </div>
+</section>
+</main>
+<footer><p>© 2026 ClipForge AI · Clip. Edit. Go Viral.</p><p>Premium creator workspace</p></footer>
+</div>
 <script>
-f.onsubmit=async e=>{e.preventDefault();s.textContent="⏳ Processing... video ki length ke hisaab se 1-5 min lagte hain";r.innerHTML="";
-const d=await(await fetch("/process",{method:"POST",body:new FormData(f)})).json();
-if(d.error){s.textContent="❌ "+d.error;return}
-s.innerHTML=`✅ ${d.clips.length} clips ready — <a href="${d.zip}">Download ALL (zip)</a>`;
-r.innerHTML='<div class="g">'+d.clips.map(c=>`<div class="c"><video src="${c.url}" controls></video><p><b>${c.hook}</b></p><a href="${c.url}" download>⬇ Download</a></div>`).join("")+"</div>"}
-</script></body></html>
+const linkTab=document.getElementById('linkTab');
+const fileTab=document.getElementById('fileTab');
+const linkPanel=document.getElementById('linkPanel');
+const filePanel=document.getElementById('filePanel');
+const quickUpload=document.getElementById('quickUpload');
+const videoFile=document.getElementById('videoFile');
+const fileName=document.getElementById('fileName');
+const notice=document.getElementById('notice');
+let mode='link';
+function setMode(m){
+ mode=m;
+ linkTab.classList.toggle('active',m==='link');
+ fileTab.classList.toggle('active',m==='file');
+ linkPanel.style.display=m==='link'?'block':'none';
+ filePanel.style.display=m==='file'?'block':'none';
+ quickUpload.style.display=m==='file'?'none':'block';
+ notice.style.display='none';
+}
+linkTab.onclick=()=>setMode('link');
+fileTab.onclick=()=>setMode('file');
+videoFile.onchange=()=>{
+ if(videoFile.files.length){
+  fileName.textContent=videoFile.files[0].name;
+  setMode('file');
+ }
+};
+document.getElementById('generate').onclick=()=>{
+ notice.style.display='block';
+ if(mode==='link'){
+  const value=document.getElementById('videoUrl').value.trim();
+  if(!value){notice.textContent='Please paste a video URL first.';return;}
+  try{new URL(value)}catch(e){notice.textContent='Please enter a valid URL.';return;}
+  notice.textContent='Your link is entered. Real clip generation is not connected yet. A video-processing backend must be added before AI clips can be rendered.';
+ }else{
+  if(!videoFile.files.length){notice.textContent='Please choose a video file first.';return;}
+  notice.textContent='File selected: '+videoFile.files[0].name+'. Real AI clip generation needs a connected processing backend.';
+ }
+};
+</script>
+</body>
+</html>
